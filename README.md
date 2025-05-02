@@ -1,1 +1,147 @@
-# esp32-awlr
+# 🌧️ ESP32-AWLR – Automatic Weather & Level Recorder
+
+**ESP32-AWLR** is a low-power, dual-mode environmental monitoring system built on ESP32. It logs weather parameters (temperature, humidity, pressure, wind speed, rainfall) and water levels using ultrasonic sensors. The device supports both **normal (data logging)** and **maintenance (web UI)** modes, and transmits data via **SIM800L GSM module**.
+
+---
+
+## 🔧 Key Features
+
+- 💤 **Deep Sleep & ULP Coprocessor**: Wind & rain counted while ESP32 sleeps
+- 🌡️ Sensor readings: temperature, humidity, pressure (HDC1080, BMP280)
+- 🌧️ Rainfall and wind speed detection via pulse inputs (GPIO 34 & 35)
+- 📶 SIM800L-based GSM communication
+- 📆 DS3231 RTC for timestamping
+- 💾 SPIFFS for persistent parameter storage
+- 🌐 Wi-Fi dashboard via Access Point (maintenance mode)
+- 📊 [ESPDash](https://github.com/ayushsharma82/ESPDash) for intuitive web interface
+
+---
+
+## 📁 Project Structure
+
+```
+
+esp32-awlr/
+├── esp32-awlr-template.ino     # Main firmware logic (setup & mode control)
+├── datetime.ino                # RTC-related functions
+├── http.ino                    # HTTP server & handlers
+├── sd.ino                      # SD card (optional) interface
+├── sensor.ino                  # Sensor reading logic
+├── wdt.ino                     # Watchdog functions
+├── webUI.ino                   # Web dashboard (maintenance mode)
+├── ulp\_main.h / ulp.s          # ULP pulse counting logic
+├── variable.h                  # Global variables & settings
+├── data/                       # SPIFFS-stored calibration and status values
+│   ├── apiVal.txt
+│   ├── batCalibVal.txt
+│   ├── fbatCalibVal.txt
+│   ├── ...
+├── LICENSE
+└── README.md
+
+```
+
+---
+
+## 🛠️ Hardware Requirements
+
+| Component              | Description                               |
+|------------------------|-------------------------------------------|
+| ESP32 Dev Module       | Main microcontroller                      |
+| SIM800L Module         | For SMS/data communication                |
+| HDC1080 Sensor         | For humidity and temperature              |
+| BMP280 Sensor          | For pressure and temperature              |
+| DS3231 RTC             | Real-time clock with battery backup       |
+| Wind & Rain Sensors    | Pulse-output based sensors                |
+| Ultrasonic Sensor x2   | For measuring water level (A & B)         |
+| Buzzer & Switches      | Manual control and alerts                 |
+| MicroSD (optional)     | For data logging (via `sd.ino`)           |
+
+---
+
+## ⚡ Operating Modes
+
+### 1. **Normal Mode** (Switch `SW2` = HIGH)
+- Device sleeps and wakes periodically (default: 30 minutes)
+- Collects & sends data via SIM800L
+- Wind & rain counts are recorded using ULP even during sleep
+
+### 2. **Maintenance Mode** (Switch `SW2` = LOW)
+- Starts Wi-Fi Access Point
+- Provides web dashboard via ESPDash
+- Allows real-time monitoring without sleep
+
+---
+
+## 🌐 Wi-Fi Access (Maintenance Mode)
+
+```cpp
+WiFi.softAP(ssid, password);
+```
+
+* **SSID**: `ESP32-AWLR`
+* **Password**: *(defined in `variable.h`)*
+* Access dashboard at `http://192.168.4.1/` after connecting
+
+---
+
+## 🧠 ULP Pulse Counter
+
+* Wind sensor on **GPIO 35**
+* Rain sensor on **GPIO 34**
+* ULP co-processor monitors pulses while main core sleeps
+* `ulp.s` and `ulp_main.h` implement low-power logic
+
+---
+
+## 💾 SPIFFS Stored Parameters
+
+| File Name                  | Purpose                             |
+| -------------------------- | ----------------------------------- |
+| `apiVal.txt`               | API key or ID for server upload     |
+| `batCalibVal.txt`          | Calibration constant for battery    |
+| `fbatCalibVal.txt`         | Calculated float battery value      |
+| `sendTimeVal.txt`          | Interval between SIM sends          |
+| `sendCountVal.txt`         | Current count toward next send      |
+| `serialStatus.txt`         | Enable/disable serial debug         |
+| `simStatus.txt`            | Flag to trigger SIM send            |
+| `ultrasonicGroundAVal.txt` | Calibration offset for ultrasonic A |
+| `ultrasonicGroundBVal.txt` | Calibration offset for ultrasonic B |
+| `rainTotalVal.txt`         | Cumulative rainfall value           |
+| `windTotalVal.txt`         | Cumulative wind value               |
+
+---
+
+## 🔁 Loop Behavior
+
+| Loop                 | Description                                       |
+| -------------------- | ------------------------------------------------- |
+| `normal_loop()`      | Sleep, wake, count pulses, send data on interval  |
+| `maintenance_loop()` | Web server, live dashboard updates                |
+| `loop()`             | Chooses between normal/maintenance based on `SW2` |
+
+---
+
+## 🧪 Serial Monitor Output Example
+
+```txt
+Running Mode: Normal
+Read HDC1080: Temp=28.32C Hum=76.20%
+Read BMP280: Temp=27.91C Pressure=1008.42 hPa
+Wind Pulse: 8 -> Wind Speed: 4 m/s
+Rain Pulse: 5 -> Rainfall: 2.5 mm
+ESP32: Entering Deep Sleep
+```
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## 🙋‍♂️ Author
+
+Developed by **Ardy Seto**
+For real-world environmental monitoring research and IoT deployments.
