@@ -94,6 +94,7 @@ esp32-awlr/
 | **I2C SCL** (RTC, BMP280, etc) | GPIO 22 (def) | I2C clock line                                |
 
 > ⚠️ Make sure all I2C components (HDC1080, BMP280, ADS1115, RTC) share **SDA (GPIO 21)** and **SCL (GPIO 22)**.
+
 > ⚠️ Use level shifters or logic conversions if needed, especially when using SIM800L and 5V sensors.
 
 ---
