@@ -22,22 +22,32 @@
 ```
 
 esp32-awlr/
-├── esp32-awlr-template.ino     # Main firmware logic (setup & mode control)
-├── datetime.ino                # RTC-related functions
-├── http.ino                    # HTTP server & handlers
-├── sd.ino                      # SD card (optional) interface
-├── sensor.ino                  # Sensor reading logic
-├── wdt.ino                     # Watchdog functions
-├── webUI.ino                   # Web dashboard (maintenance mode)
-├── ulp\_main.h / ulp.s          # ULP pulse counting logic
-├── variable.h                  # Global variables & settings
-├── data/                       # SPIFFS-stored calibration and status values
-│   ├── apiVal.txt
-│   ├── batCalibVal.txt
-│   ├── fbatCalibVal.txt
-│   ├── ...
-├── LICENSE
-└── README.md
+├── LICENSE                         # Project license
+├── project
+│   ├── data
+│   │   ├── apiVal.txt              # API key or ID for server upload
+│   │   ├── batCalibVal.txt         # Calibration constant for battery
+│   │   ├── fbatCalibVal.txt        # Calculated float battery value
+│   │   ├── rainTotalVal.txt        # Cumulative rainfall value
+│   │   ├── sendCountVal.txt        # Current count toward next send
+│   │   ├── sendTimeVals.txt        # Interval between SIM sends
+│   │   ├── sendTimeVal.txt         # Interval between SIM sends
+│   │   ├── serialStatus.txt        # Enable/disable serial debug
+│   │   ├── simStatus.txt           # Flag to trigger SIM send
+│   │   ├── ultrasonicGroundAVal.txt    # Calibration offset for ultrasonic A
+│   │   ├── ultrasonicGroundBVal.txt    # Calibration offset for ultrasonic B           
+│   │   └── windTotalVal.txt        # Cumulative wind value
+│   ├── datetime.ino                # RTC-related functions
+│   ├── esp32-awlr-template.ino     # Main firmware logic (setup & mode control)
+│   ├── http.ino                    # HTTP server & handlers
+│   ├── sd.ino                      # SD card (optional) interface  
+│   ├── sensor.ino                  # Sensor reading logic
+│   ├── ulp_main.h                  # ULP pulse counting logic
+│   ├── ulp.s                       # ULP assembly code
+│   ├── variable.h                  # Global variables & settings
+│   ├── wdt.ino                     # Watchdog functions
+│   └── webUI.ino                   # Web dashboard (maintenance mode)
+└── README.md                       # Project documentation
 
 ```
 
