@@ -69,6 +69,34 @@ esp32-awlr/
 
 ---
 
+### 🔌 Wiring Table
+
+| Component                      | ESP32 Pin     | Description                                   |
+| ------------------------------ | ------------- | --------------------------------------------- |
+| **SIM800L TX**                 | GPIO 17       | ESP32 RX (receives from SIM800L)              |
+| **SIM800L RX**                 | GPIO 16       | ESP32 TX (sends to SIM800L)                   |
+| **SIM800L RESET**              | GPIO 15       | Reset control for SIM800L                     |
+| **Ultrasonic Sensor A Trig**   | GPIO 26       | Trigger pin for ultrasonic sensor A           |
+| **Ultrasonic Sensor A Echo**   | GPIO 33       | Echo pin for ultrasonic sensor A              |
+| **Ultrasonic Sensor B Trig**   | GPIO 14       | Trigger pin for ultrasonic sensor B           |
+| **Ultrasonic Sensor B Echo**   | GPIO 13       | Echo pin for ultrasonic sensor B              |
+| **Wind Sensor (Pulse)**        | GPIO 35 (RTC) | Pulse-counted by ULP coprocessor              |
+| **Rain Sensor (Pulse)**        | GPIO 34 (RTC) | Pulse-counted by ULP coprocessor              |
+| **Switch 1 (SW1)**             | GPIO 12       | Generic input switch                          |
+| **Switch 2 (SW2)**             | GPIO 4        | Mode select: Normal / Maintenance             |
+| **Switch 3 (SW3)**             | GPIO 2        | Generic input switch                          |
+| **Alarm Pin**                  | GPIO 27       | Digital input, used for alarm signal          |
+| **Interrupt Pin (INT)**        | GPIO 27       | Possibly shared with alarmPin (same pin used) |
+| **Buzzer**                     | GPIO 25       | Active LOW control output for buzzer          |
+| **WDT Trigger (Keep Alive)**   | GPIO 32       | Watchdog refresh pin                          |
+| **SD Card CS (if used)**       | GPIO 5        | Chip select for SPI SD card                   |
+| **I2C SDA** (RTC, BMP280, etc) | GPIO 21 (def) | I2C data line                                 |
+| **I2C SCL** (RTC, BMP280, etc) | GPIO 22 (def) | I2C clock line                                |
+
+> ⚠️ Make sure all I2C components (HDC1080, BMP280, ADS1115, RTC) share **SDA (GPIO 21)** and **SCL (GPIO 22)**.
+> ⚠️ Use level shifters or logic conversions if needed, especially when using SIM800L and 5V sensors.
+
+---
 ## ⚡ Operating Modes
 
 ### 1. **Normal Mode** (Switch `SW2` = HIGH)
